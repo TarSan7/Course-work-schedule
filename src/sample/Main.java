@@ -24,6 +24,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        System.out.println("Hello!");
 
         /*Первый лист*/
         Stage generalStage = new Stage();           //главная форма
@@ -66,9 +67,9 @@ public class Main extends Application {
         generalStage.show();
         /*Конец первого листа*/
 
-        dataAccessor1 = new PersonDataAccessor("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/schedule", "root", "root"); // provide driverName, dbURL, user, password...
-        dataAccessor2 = new SubjectDataAccessor("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/schedule", "root", "root"); // provide driverName, dbURL, user, password...
-        dataAccessor3 = new AuditoryDataAccessor("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/schedule", "root", "root");
+        dataAccessor1 = new PersonDataAccessor("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/schedule2", "root", "root"); // provide driverName, dbURL, user, password...
+        dataAccessor2 = new SubjectDataAccessor("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/schedule2", "root", "root"); // provide driverName, dbURL, user, password...
+        dataAccessor3 = new AuditoryDataAccessor("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/schedule2", "root", "root");
 
         /*------Person-start------*/
         TableView<Person> personTable1 = new TableView<>();
