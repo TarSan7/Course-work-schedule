@@ -26,7 +26,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         System.out.println("Hello!");
         System.out.println("World");
-        System.out.println("Sasha");
 
         /*Первый лист*/
         Stage generalStage = new Stage();           //главная форма
