@@ -24,6 +24,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         /*Первый лист*/
         Stage generalStage = new Stage();           //главная форма
 
@@ -106,6 +107,8 @@ public class Main extends Application {
         personTable2.getItems().addAll(dataAccessor2.getSubjectList());
         /*------Subject-finish-------*/
 
+
+        /*------error stage-------*/
         Stage errorStage = new Stage();
         FlowPane paneError = new FlowPane();
         paneError.setAlignment(Pos.CENTER);
@@ -133,7 +136,7 @@ public class Main extends Application {
                 errorStage.close();
             }
         });
-
+        /*------end of error stage-------*/
 
         /*-----Доп возможности-------*/
         FlowPane paneInDopPane = new FlowPane(500, 500);                //Pane in stackpane
