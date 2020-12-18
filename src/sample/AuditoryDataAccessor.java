@@ -5,17 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuditoryDataAccessor {
-    // in real life, use a connection pool....
     private Connection connection ;
-    private String numOfWeek, numOfPair, dayOfWeek;
+    private int numOfWeek, numOfPair, dayOfWeek;
 
     public AuditoryDataAccessor( String driverClassName, String dbURL, String user, String password) throws SQLException, ClassNotFoundException {
         Class.forName(driverClassName);
         connection = DriverManager.getConnection(dbURL, user, password);
     }
-    public void setParam(String n1, String str, String n2){
+    public void setParam(int n1, int n3, int n2){
         numOfWeek = n1;
-        dayOfWeek = str;
+        dayOfWeek = n3;
         numOfPair = n2;
     }
 
@@ -28,14 +27,13 @@ public class AuditoryDataAccessor {
     public List<Auditory> getAuditoryList() throws SQLException {
 /*UNION  SELECT список_аудиторий.Номер_аудитории, Номер_корпуса, "Занята" FROM список_аудиторий WHERE список_аудиторий.Номер_аудитории NOT IN(SELECT список_аудиторий.Номер_аудитории FROM список_аудиторий LEFT JOIN расписание ON расписание.Номер_аудитории = список_аудиторий.Номер_аудитории WHERE id_дня_недели = ? AND Номер_пары = ? AND Номер_недели = ? )*/
         PreparedStatement preparedStatement = connection.prepareStatement( "SELECT список_аудиторий.Номер_аудитории, Номер_корпуса, \"Занята\" FROM список_аудиторий LEFT JOIN расписание ON расписание.Номер_аудитории = список_аудиторий.Номер_аудитории WHERE id_дня_недели = ? AND Номер_пары = ? AND Номер_недели = ? UNION SELECT список_аудиторий.Номер_аудитории, Номер_корпуса, \"Свободна\" FROM список_аудиторий WHERE список_аудиторий.Номер_аудитории NOT IN(SELECT список_аудиторий.Номер_аудитории FROM список_аудиторий LEFT JOIN расписание ON расписание.Номер_аудитории = список_аудиторий.Номер_аудитории WHERE id_дня_недели = ? AND Номер_пары = ? AND Номер_недели = ?)");
-        preparedStatement.setInt(1, Integer.parseInt(dayOfWeek));
-        preparedStatement.setInt(2, Integer.parseInt(numOfPair));
-        preparedStatement.setInt(3, Integer.parseInt(numOfWeek));
-        preparedStatement.setInt(4, Integer.parseInt(dayOfWeek));
-        preparedStatement.setInt(5, Integer.parseInt(numOfPair));
-        preparedStatement.setInt(6, Integer.parseInt(numOfWeek));
+        preparedStatement.setInt(1, dayOfWeek);
+        preparedStatement.setInt(2, numOfPair);
+        preparedStatement.setInt(3, numOfWeek);
+        preparedStatement.setInt(4, dayOfWeek);
+        preparedStatement.setInt(5, numOfPair);
+        preparedStatement.setInt(6, numOfWeek);
 
-        System.out.println();
         ResultSet rs = preparedStatement.executeQuery();
 
         List<Auditory> auditoryList = new ArrayList<>();

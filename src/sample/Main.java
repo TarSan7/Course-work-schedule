@@ -10,7 +10,7 @@ import javafx.scene.control.cell.*;
 import javafx.scene.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
+import javafx.collections.*;
 import javafx.scene.text.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -128,7 +128,7 @@ public class Main extends Application {
 
         Scene sceneError = new Scene(paneError, 250, 100);
         errorStage.setScene(sceneError);
-        //errorStage.show();
+        errorStage.show();
 
         buttonError.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -150,17 +150,21 @@ public class Main extends Application {
 
         Label numOfWeekDop = new Label("Номер недели:");
         numOfWeekDop.setPrefSize(150, 20);
-        TextField fieldWeekDop = new TextField();
+        ObservableList<String> langWeekItems = FXCollections.observableArrayList("1", "2");
+        ComboBox fieldWeekDop = new ComboBox(langWeekItems);
         fieldWeekDop.setPrefSize(150, 50);
 
         Label dayOfWeekDop = new Label("День недели:");
         dayOfWeekDop.setPrefSize(150, 20);
-        TextField fieldDayDop = new TextField();
+        ObservableList<String> langDayItems = FXCollections.observableArrayList("Понедельник", "Вторник", "Среда", "Четверг",
+                "Пятница", "Суббота", "Воскресенье");
+        ComboBox fieldDayDop = new ComboBox(langDayItems);
         fieldDayDop.setPrefSize(150, 50);
 
         Label pairDop = new Label("Номер пары:");
         dayOfWeekDop.setPrefSize(150, 20);
-        TextField fieldPairDop = new TextField();
+        ObservableList<String> langPairItems = FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7");
+        ComboBox fieldPairDop = new ComboBox(langPairItems);
         fieldPairDop.setPrefSize(150, 50);
 
         Text textForPerson = new Text("Для просмотра преподавателей нажмите кнопку:");
@@ -182,12 +186,16 @@ public class Main extends Application {
         paneInDopPane.setMargin(textForSubject, new Insets(0, 0, 0, 10));
         paneInDopPane.setMargin(textForPerson, new Insets(0, 0, 0, 10));
 
+        Button exitFromDop = new Button("Назад");                   //кнопка возврата в главное окно
+        exitFromDop.setPrefSize(100, 25);
+
         paneInDopPane.getChildren().addAll(textForAuditory, numOfWeekDop, dayOfWeekDop, pairDop, fieldWeekDop, fieldDayDop, fieldPairDop, buttonForAuditory,
-                textForPerson, buttonForPerson, textForSubject, buttonForSubject);
+                textForPerson, buttonForPerson, textForSubject, buttonForSubject, exitFromDop);
+
+        paneInDopPane.setMargin(exitFromDop, new Insets(0, 0, 0, 400));
 
         StackPane dopStackPane = new StackPane(paneInDopPane);                                      //Stack pane
         dopStackPane.setStyle("-fx-background-color: #B0C4DE; -fx-border-insets: 10; -fx-border-color: black");
-
 
         Stage personStage = new Stage();                            //Person stage
         Scene first = new Scene(personTable1, 400, 500);
@@ -203,48 +211,48 @@ public class Main extends Application {
         thirdGeneralButton.setOnAction(new EventHandler<ActionEvent>() {        //вывод дополнительной панели по кнопке
             @Override
             public void handle(ActionEvent event) {
+                generalStage.close();
                 primaryStage.show();
             }
         });
 
-
         buttonForAuditory.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String numOfWeek = fieldWeekDop.getText();
-                String dayOfWeek;
-                switch (fieldDayDop.getText()) {
-                    case "понедельник":
-                        dayOfWeek = "1";
+                int numOfWeek = Integer.parseInt((String) fieldWeekDop.getValue());
+                int dayOfWeek;
+                switch ((String) fieldDayDop.getValue()) {
+                    case "Понедельник":
+                        dayOfWeek = 1;
                         break;
-                    case "вторник":
-                        dayOfWeek = "2";
+                    case "Вторник":
+                        dayOfWeek = 2;
                         break;
-                    case "среда":
-                        dayOfWeek = "3";
+                    case "Среда":
+                        dayOfWeek = 3;
                         break;
-                    case "четверг":
-                        dayOfWeek = "4";
+                    case "Четверг":
+                        dayOfWeek = 4;
                         break;
-                    case "пятница":
-                        dayOfWeek = "5";
+                    case "Пятница":
+                        dayOfWeek = 5;
                         break;
-                    case "суббота":
-                        dayOfWeek = "6";
+                    case "Суббота":
+                        dayOfWeek = 6;
                         break;
-                    case "воскресенье":
-                        dayOfWeek = "7";
+                    case "Воскресенье":
+                        dayOfWeek = 7;
                         break;
                     default:
-                        dayOfWeek = "1";
+                        dayOfWeek = 1;
                         break;
                 }
-                String numOfPair = fieldPairDop.getText();
+                int numOfPair = Integer.parseInt((String) fieldPairDop.getValue());
                 dataAccessor3.setParam(numOfWeek, dayOfWeek, numOfPair);
 
                 /*------Auditory-start------*/
-                Label titleOfAudTable = new Label("Состояние аудиторий в " + fieldWeekDop.getText() + " неделю,\n" + fieldDayDop.getText() + " на " + fieldPairDop.getText()
-                        + " паре.");
+                Label titleOfAudTable = new Label("Состояние аудиторий в " + (String) fieldWeekDop.getValue() + " неделю,\n"
+                        + (String)fieldDayDop.getValue() + " на " + (String)fieldPairDop.getValue() + " паре.");
                 titleOfAudTable.setFont(new Font(15));
 
                 TableView<Auditory> auditoryTable = new TableView<>();
@@ -266,7 +274,9 @@ public class Main extends Application {
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
-                VBox vBox = new VBox(titleOfAudTable, auditoryTable);
+                FlowPane vBox = new FlowPane(titleOfAudTable, auditoryTable);
+                vBox.setAlignment(Pos.CENTER);
+                vBox.setVgap(30);
                 Stage audStage = new Stage();                            //Person stage
                 Scene aud = new Scene(vBox, 400, 500);
                 audStage.setScene(aud);
@@ -290,6 +300,13 @@ public class Main extends Application {
             }
         });
 
+        exitFromDop.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                primaryStage.close();
+                generalStage.show();
+            }
+        });
     }
 
 
