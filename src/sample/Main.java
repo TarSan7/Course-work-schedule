@@ -91,6 +91,7 @@ public class Main extends Application {
         personTable1.getItems().addAll(dataAccessor1.getPersonList());
         /*------Person-finish-------*/
 
+
         /*------Subject-start-------*/
         TableView<Subject> personTable2 = new TableView<>();
         personTable2.setPrefSize(400, 400);
