@@ -63,7 +63,6 @@ public class Main extends Application {
         Scene generalScene = new Scene(generalStackPane, 600, 600);
         generalStage.setScene(generalScene);
         generalStage.show();
-
         /*Конец первого листа*/
 
         dataAccessor1 = new PersonDataAccessor("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/schedule", "root", "root"); // provide driverName, dbURL, user, password...
@@ -125,7 +124,7 @@ public class Main extends Application {
 
         Scene sceneError = new Scene(paneError, 250, 100);
         errorStage.setScene(sceneError);
-        errorStage.show();
+        //errorStage.show();
 
         buttonError.setOnAction(new EventHandler<ActionEvent>() {
             @Override
